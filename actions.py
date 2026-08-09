@@ -22,6 +22,39 @@ VK_MEDIA_NEXT_TRACK = 0xB0
 VK_MEDIA_PREV_TRACK = 0xB1
 VK_MEDIA_PLAY_PAUSE = 0xB3
 
+
+def press_keyboard_keys(keys: list) -> bool:
+    """Simulates single key presses or hotkey combinations using PyAutoGUI."""
+    if not keys:
+        print("[Action Error]: No keys specified for key press action.")
+        return False
+
+    # Normalize spoken key names to standard PyAutoGUI keys
+    key_map = {
+        "control": "ctrl",
+        "windows": "win",
+        "cmd": "win",
+        "command": "win",
+        "option": "alt",
+        "escape": "esc",
+        "return": "enter",
+        "spacebar": "space"
+    }
+
+    clean_keys = [key_map.get(k.lower().strip(), k.lower().strip()) for k in keys]
+
+    print(f"[Action Executing]: Sending key combination {clean_keys}...")
+
+    try:
+        # pyautogui.hotkey accepts unpacked lists and handles pressing/releasing in order
+        pyautogui.hotkey(*clean_keys)
+        print(f"[Action Success]: Pressed keys {clean_keys}.")
+        return True
+    except Exception as error:
+        print(f"[Action Error]: Failed to press keys {clean_keys}: {error}")
+        return False
+    
+
 def scroll_window(direction: str):
     """Scrolls the active window up or down using PyAutoGUI."""
     # A large value is often needed on Windows to simulate a standard mouse wheel movement
@@ -244,6 +277,10 @@ def execute_action(intent_data: dict):
         app_name = intent_data.get("app_name", "")
         if app_name:
             open_local_application(app_name)
+
+    elif action == "press_keys":
+        keys = intent_data.get("keys", [])
+        press_keyboard_keys(keys)
 
     elif action == "click_on_screen":
         target = intent_data.get("target", "")
