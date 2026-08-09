@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout, 
-    QPushButton, QFrame, QScrollArea
+    QPushButton, QFrame
 )
 from PySide6.QtCore import Qt, QTimer, Slot
 from PySide6.QtGui import QFont
@@ -12,14 +12,17 @@ class AssistantOverlay(QWidget):
         self.init_ui()
 
     def init_ui(self):
+        # Frameless, Stays On Top, Tool Window (Doesn't create extra taskbar icons)
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint |
             Qt.WindowType.WindowStaysOnTopHint |
-            Qt.WindowType.Tool
+            Qt.WindowType.Tool |
+            Qt.WindowType.WindowDoesNotAcceptFocus  # Prevents stealing focus on show
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, True) # Ensures underlying window stays active
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
-        # Default compact size
         self.default_width = 560
         self.default_height = 140
         self.resize(self.default_width, self.default_height)
@@ -58,6 +61,7 @@ class AssistantOverlay(QWidget):
 
         self.close_btn = QPushButton("✕")
         self.close_btn.setFixedSize(28, 28)
+        self.close_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)  # Keep focus off close button
         self.close_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.close_btn.setStyleSheet("""
             QPushButton {
@@ -81,7 +85,7 @@ class AssistantOverlay(QWidget):
         header_layout.addWidget(self.close_btn)
 
         # Main Title
-        self.title_label = QLabel("JARVIS Voice Assistant")
+        self.title_label = QLabel("Sky Voice Assistant")
         self.title_label.setFont(QFont("Segoe UI", 15, QFont.Weight.Bold))
         self.title_label.setStyleSheet("color: #FFFFFF; border: none; background: transparent;")
 
@@ -137,7 +141,7 @@ class AssistantOverlay(QWidget):
                 border-radius: 8px;
                 border: 1px solid rgba(0, 229, 255, 0.4);
             """)
-        elif "executing" in title.lower() or "intent" in title.lower():
+        elif "executing" in title.lower() or "processing" in title.lower():
             self.resize(self.default_width, self.default_height)
             self.badge.setText("⚡ PROCESSING")
             self.badge.setStyleSheet("""
@@ -159,9 +163,9 @@ class AssistantOverlay(QWidget):
             """)
 
         self.center_on_screen()
+        
+        # Display the overlay over all windows WITHOUT snatching focus
         self.show()
-        self.raise_()
-        self.activateWindow()
 
     @Slot(int)
     def schedule_hide(self, delay_ms: int = 2400):
