@@ -22,6 +22,24 @@ VK_MEDIA_NEXT_TRACK = 0xB0
 VK_MEDIA_PREV_TRACK = 0xB1
 VK_MEDIA_PLAY_PAUSE = 0xB3
 
+def scroll_window(direction: str):
+    """Scrolls the active window up or down using PyAutoGUI."""
+    # A large value is often needed on Windows to simulate a standard mouse wheel movement
+    scroll_amount = 800 
+    
+    print(f"[Action Executing]: Attempting to scroll {direction}...")
+    
+    if direction == "up":
+        pyautogui.scroll(scroll_amount)
+        print(f"[Action Success]: Scrolled up.")
+    elif direction == "down":
+        # Negative value forces a downward scroll
+        pyautogui.scroll(-scroll_amount) 
+        print(f"[Action Success]: Scrolled down.")
+    else:
+        print(f"[Action Warning]: Unrecognized scroll direction '{direction}'.")
+
+
 def click_text_on_screen(target_text: str, occurrence: int = 1) -> bool:
     """Uses OCR to find words on the screen, collects all matches, and clicks the specified occurrence."""
     if not target_text:
@@ -236,6 +254,10 @@ def execute_action(intent_data: dict):
         # Safely get the occurrence, default to 1 if the LLM forgets it
         occurrence = intent_data.get("occurrence", 1) 
         click_text_on_screen(target, occurrence)
+
+    elif action == "scroll_screen":
+        direction = intent_data.get("direction", "down").lower().strip()
+        scroll_window(direction)
 
     elif action in ["answer_question", "dismiss"]:
         # Handled in main.py directly

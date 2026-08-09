@@ -44,6 +44,9 @@ Available actions:
    If the user specifies an occurrence (e.g., "second", "third", "last"), include it as an integer index (1 for first, 2 for second, -1 for last). Defaults to 1.
    Structure: {"action": "click_text", "text": "<word to click>", "occurrence": <integer>}
 
+10. scroll_screen: When the user wants to scroll the current screen up or down.
+   Structure: {"action": "scroll_screen", "direction": "<up | down>"}
+
 Rules:
 - Output valid JSON only. Never output markdown fences or conversational filler.
 """
