@@ -182,7 +182,7 @@ def click_visual_target(target_name: str) -> bool:
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     clean_target = target_name.replace(".png", "") + ".png"
-    image_path = os.path.join(script_dir, clean_target)
+    image_path = os.path.join(script_dir, "src", "img", clean_target)
 
     if not os.path.exists(image_path):
         print(f"[Action Error]: Template image missing at '{image_path}'.")

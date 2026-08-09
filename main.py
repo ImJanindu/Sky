@@ -16,7 +16,7 @@ pygame.mixer.init()
 
 # Locate wakeup.mp3 in the current script folder
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-WAKEUP_SOUND_PATH = os.path.join(SCRIPT_DIR, "wakeup.mp3")
+WAKEUP_SOUND_PATH = os.path.join(SCRIPT_DIR, r"src\audio\wakeup.mp3")
 
 wakeup_sound = None
 
