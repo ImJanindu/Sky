@@ -41,7 +41,8 @@ Available actions:
    Structure: {"action": "click_on_screen", "target": "<first_video | play_button | subscribe | close>"}
 
 9. click_text: When the user wants to click a specific word or phrase written on the screen.
-   Structure: {"action": "click_text", "text": "<the specific word to click>"}
+   If the user specifies an occurrence (e.g., "second", "third", "last"), include it as an integer index (1 for first, 2 for second, -1 for last). Defaults to 1.
+   Structure: {"action": "click_text", "text": "<word to click>", "occurrence": <integer>}
 
 Rules:
 - Output valid JSON only. Never output markdown fences or conversational filler.

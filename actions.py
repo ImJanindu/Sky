@@ -22,46 +22,60 @@ VK_MEDIA_NEXT_TRACK = 0xB0
 VK_MEDIA_PREV_TRACK = 0xB1
 VK_MEDIA_PLAY_PAUSE = 0xB3
 
-def click_text_on_screen(target_text: str) -> bool:
-    """Uses OCR to find a word on the screen and clicks its geometric center."""
+def click_text_on_screen(target_text: str, occurrence: int = 1) -> bool:
+    """Uses OCR to find words on the screen, collects all matches, and clicks the specified occurrence."""
     if not target_text:
         return False
 
-    print(f"[Action Executing]: Running OCR scan for text '{target_text}'...")
+    print(f"[Action Executing]: OCR scanning for '{target_text}' (Occurrence: {occurrence})...")
     
     try:
-        # Capture the entire screen
         screenshot = pyautogui.screenshot()
-        
-        # Extract text and bounding box data as a dictionary
         ocr_data = pytesseract.image_to_data(screenshot, output_type=pytesseract.Output.DICT)
         
         target_lower = target_text.lower().strip()
+        matches = []
 
-        # Iterate through the recognized words
+        # 1. Iterate through all recognized words and collect every match
         for i in range(len(ocr_data['text'])):
             word = ocr_data['text'][i].lower().strip()
             
-            # Check if the target text matches the scanned word
             if target_lower in word and len(word) > 0:
-                # Extract geometric boundaries
                 x = ocr_data['left'][i]
                 y = ocr_data['top'][i]
                 width = ocr_data['width'][i]
                 height = ocr_data['height'][i]
                 
-                # Calculate the exact center pixel
-                center_x = x + (width // 2)
-                center_y = y + (height // 2)
-                
-                # Move and click
-                pyautogui.moveTo(center_x, center_y, duration=0.4)
-                pyautogui.click()
-                print(f"[Action Success]: Clicked text '{word}' at coordinates ({center_x}, {center_y}).")
-                return True
-                
-        print(f"[Action Failed]: The text '{target_text}' was not found on the screen.")
-        return False
+                matches.append({
+                    'word': word,
+                    'center_x': x + (width // 2),
+                    'center_y': y + (height // 2)
+                })
+
+        # 2. Check if any matches were found
+        if not matches:
+            print(f"[Action Failed]: The text '{target_text}' was not found.")
+            return False
+
+        # 3. Handle the array indexing logic based on user request
+        target_index = 0
+        
+        if occurrence == -1:
+            target_index = len(matches) - 1  # Select the last element
+        elif 1 <= occurrence <= len(matches):
+            target_index = occurrence - 1    # Convert to 0-based array index
+        elif occurrence > len(matches):
+            print(f"[Action Warning]: You asked for occurrence {occurrence}, but only {len(matches)} exist. Clicking the last one.")
+            target_index = len(matches) - 1
+
+        # 4. Extract final coordinates and execute the click
+        target_match = matches[target_index]
+        
+        pyautogui.moveTo(target_match['center_x'], target_match['center_y'], duration=0.4)
+        pyautogui.click()
+        
+        print(f"[Action Success]: Clicked '{target_match['word']}' (Match {target_index + 1} of {len(matches)}).")
+        return True
 
     except Exception as error:
         print(f"[Action Error]: OCR processing failed: {error}")
@@ -219,7 +233,9 @@ def execute_action(intent_data: dict):
 
     elif action == "click_text":
         target = intent_data.get("text", "")
-        click_text_on_screen(target)
+        # Safely get the occurrence, default to 1 if the LLM forgets it
+        occurrence = intent_data.get("occurrence", 1) 
+        click_text_on_screen(target, occurrence)
 
     elif action in ["answer_question", "dismiss"]:
         # Handled in main.py directly
