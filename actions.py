@@ -5,6 +5,11 @@ import webbrowser
 import urllib.parse
 import pyautogui
 
+import pytesseract
+
+# Point pytesseract to the installed Windows binary
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 # Enable PyAutoGUI safety features
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.1
@@ -16,6 +21,51 @@ VK_VOLUME_UP = 0xAF
 VK_MEDIA_NEXT_TRACK = 0xB0
 VK_MEDIA_PREV_TRACK = 0xB1
 VK_MEDIA_PLAY_PAUSE = 0xB3
+
+def click_text_on_screen(target_text: str) -> bool:
+    """Uses OCR to find a word on the screen and clicks its geometric center."""
+    if not target_text:
+        return False
+
+    print(f"[Action Executing]: Running OCR scan for text '{target_text}'...")
+    
+    try:
+        # Capture the entire screen
+        screenshot = pyautogui.screenshot()
+        
+        # Extract text and bounding box data as a dictionary
+        ocr_data = pytesseract.image_to_data(screenshot, output_type=pytesseract.Output.DICT)
+        
+        target_lower = target_text.lower().strip()
+
+        # Iterate through the recognized words
+        for i in range(len(ocr_data['text'])):
+            word = ocr_data['text'][i].lower().strip()
+            
+            # Check if the target text matches the scanned word
+            if target_lower in word and len(word) > 0:
+                # Extract geometric boundaries
+                x = ocr_data['left'][i]
+                y = ocr_data['top'][i]
+                width = ocr_data['width'][i]
+                height = ocr_data['height'][i]
+                
+                # Calculate the exact center pixel
+                center_x = x + (width // 2)
+                center_y = y + (height // 2)
+                
+                # Move and click
+                pyautogui.moveTo(center_x, center_y, duration=0.4)
+                pyautogui.click()
+                print(f"[Action Success]: Clicked text '{word}' at coordinates ({center_x}, {center_y}).")
+                return True
+                
+        print(f"[Action Failed]: The text '{target_text}' was not found on the screen.")
+        return False
+
+    except Exception as error:
+        print(f"[Action Error]: OCR processing failed: {error}")
+        return False
 
 
 def send_virtual_key(vk_code: int):
@@ -166,6 +216,10 @@ def execute_action(intent_data: dict):
     elif action == "click_on_screen":
         target = intent_data.get("target", "")
         click_visual_target(target)
+
+    elif action == "click_text":
+        target = intent_data.get("text", "")
+        click_text_on_screen(target)
 
     elif action in ["answer_question", "dismiss"]:
         # Handled in main.py directly

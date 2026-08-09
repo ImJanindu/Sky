@@ -40,6 +40,9 @@ Available actions:
    Sub-commands should match the names of your saved image templates.
    Structure: {"action": "click_on_screen", "target": "<first_video | play_button | subscribe | close>"}
 
+9. click_text: When the user wants to click a specific word or phrase written on the screen.
+   Structure: {"action": "click_text", "text": "<the specific word to click>"}
+
 Rules:
 - Output valid JSON only. Never output markdown fences or conversational filler.
 """
