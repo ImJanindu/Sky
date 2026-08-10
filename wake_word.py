@@ -1,6 +1,7 @@
 import pyaudio
 import numpy as np
 from openwakeword.model import Model
+import os
 
 def listen_for_wakeword():
     # Audio stream parameters required by the model
@@ -19,13 +20,22 @@ def listen_for_wakeword():
         frames_per_buffer=CHUNK
     )
 
-    print("Loading OpenWakeWord model...")
+    print("Loading custom Sky OpenWakeWord model...")
 
-    # Explicitly force the ONNX inference framework for Windows compatibility
-    import openwakeword
-    openwakeword.utils.download_models() # Ensure ONNX models are downloaded
-    oww_model = Model(inference_framework="onnx")
-    print("Listening for wake word...")
+    # Load your custom ONNX model directly
+    # Ensure sky.onnx is placed in the same directory as this script
+    model_path = r"src\sky.onnx"
+    
+    if not os.path.exists(model_path):
+        print(f"Error: Could not find the model file at {os.path.abspath(model_path)}")
+        return False
+
+    oww_model = Model(
+        wakeword_models=[model_path], 
+        inference_framework="onnx"
+    )
+    
+    print("Listening for wake word 'Sky'...")
 
     try:
         while True:
@@ -35,7 +45,7 @@ def listen_for_wakeword():
             # Feed the audio frame to the classification model
             oww_model.predict(audio_data)
             
-            # Check the confidence scores of all loaded models
+            # Check the confidence scores of the custom model
             for model_name, scores in oww_model.prediction_buffer.items():
                 latest_score = scores[-1]
                 
