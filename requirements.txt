@@ -1,0 +1,10 @@
+PyAudio
+numpy
+openwakeword
+faster-whisper
+edge-tts
+pygame
+PySide6
+groq
+PyAutoGUI
+pytesseract
