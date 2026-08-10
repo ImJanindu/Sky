@@ -50,8 +50,8 @@ class AssistantWorker(QThread):
 
     def run(self):
         print("\n===========================================")
-        print(" JARVIS Voice Assistant Running in Background ")
-        print(" Say 'Hey JARVIS' or 'Wakeup' to activate... ")
+        print(" SKY Voice Assistant Running in Background ")
+        print(" Say 'Sky' to activate... ")
         print("===========================================\n")
 
         while True:
@@ -67,7 +67,7 @@ class AssistantWorker(QThread):
 
                 # 2. Wake Word Triggered -> Show UI
                 self.wake_word_detected.emit()
-                self.status_changed.emit("JARVIS is listening...", "Speak your command now")
+                self.status_changed.emit("SKY is listening...", "Speak your command now")
 
                 #tts.speak("Hello sir, at your service.", block=True)
                 
@@ -86,7 +86,7 @@ class AssistantWorker(QThread):
                     # 5. Handle Actions
                     if action == "answer_question":
                         answer_text = parsed_intent.get("answer", "Here is what I found.")
-                        self.status_changed.emit("JARVIS says:", answer_text)
+                        self.status_changed.emit("SKY says:", answer_text)
                         
                         tts.speak(answer_text)
                         
@@ -97,7 +97,7 @@ class AssistantWorker(QThread):
                     elif action == "dismiss":
                         tts.stop_speaking()
                         intent.clear_context()
-                        self.status_changed.emit("Cancelled", "JARVIS closed")
+                        self.status_changed.emit("Cancelled", "SKY closed")
                         self.command_finished.emit(600)
 
                     elif action != "unknown":
@@ -121,7 +121,7 @@ def main():
     overlay = AssistantOverlay()
     worker = AssistantWorker()
 
-    worker.wake_word_detected.connect(lambda: overlay.update_status("JARVIS is listening...", "Speak your command now"))
+    worker.wake_word_detected.connect(lambda: overlay.update_status("SKY is listening...", "Speak your command now"))
     worker.status_changed.connect(overlay.update_status)
     worker.command_finished.connect(overlay.schedule_hide)
 

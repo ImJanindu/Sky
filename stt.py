@@ -2,7 +2,7 @@ import pyaudio
 import numpy as np
 from faster_whisper import WhisperModel
 
-print("Loading Whisper Base model... (This downloads ~140MB on first run)")
+print("Loading Whisper Base Speech to Text model...")
 # compute_type="int8" compresses the model to run lightning-fast on your Ryzen CPU
 model = WhisperModel("base.en", device="cpu", compute_type="int8")
 print("Model loaded successfully.")
@@ -27,7 +27,7 @@ def record_and_transcribe():
         frames_per_buffer=CHUNK
     )
 
-    print("\n[JARVIS is listening... Speak your command]")
+    print("\n[SKY is listening... Speak your command]")
     
     frames = []
     silence_chunks = 0

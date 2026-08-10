@@ -7,7 +7,7 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "gsk_57xKO3bPSkjqJGSxBjY8WGdyb3FYM
 client = Groq(api_key=GROQ_API_KEY)
 
 SYSTEM_PROMPT = """
-You are the natural language understanding brain of a Windows desktop voice assistant named JARVIS.
+You are the natural language understanding brain of a Windows desktop voice assistant named SKY.
 Your job is to parse the user's spoken command into a structured JSON action.
 You will receive recent conversation history so you understand context and follow-up questions.
 
@@ -30,7 +30,7 @@ Available actions:
 5. open_application: When user wants to launch a local program.
    Structure: {"action": "open_application", "app_name": "<program name>"}
 
-6. dismiss: When user wants to cancel, stop listening, or close JARVIS.
+6. dismiss: When user wants to cancel, stop listening, or close SKY.
    Structure: {"action": "dismiss"}
 
 7. unknown: When the request does not fit any category.
