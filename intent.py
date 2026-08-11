@@ -1,9 +1,12 @@
 import os
 import json
+from dotenv import load_dotenv
 from groq import Groq
 
+load_dotenv()
+
 # Replace with your actual key if not using environment variables
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 client = Groq(api_key=GROQ_API_KEY)
 
 SYSTEM_PROMPT = """
