@@ -74,7 +74,7 @@ python main.py
 
 ## 👨‍💻 Developer Information
 
-**Creator**: [Janindu Malshan](https://github.com/ImJanindu)  
+**Creator** : [Janindu Malshan](https://github.com/ImJanindu)  
 *Computer Science Student & Engineer*
 
 Built with ❤️ to demonstrate the power of combining modern AI with desktop automation.
