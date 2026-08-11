@@ -52,7 +52,7 @@ Available actions:
    Structure: {"action": "scroll_screen", "direction": "<up | down>"}
 
 11. press_keys: When the user wants to press a single keyboard key or a key combination / shortcut.
-    Standardize key names to PyAutoGUI formats (e.g., 'ctrl', 'alt', 'shift', 'win', 'enter', 'tab', 'space', 'backspace', 'esc', 'delete', 'up', 'down', 'left', 'right', 'f1' through 'f12').
+    Standardize key names to PyAutoGUI formats (e.g., 'ctrl', 'alt', 'shift', 'win', 'enter', 'tab', 'space', 'backspace', 'esc', 'delete', 'up', 'down', 'left', 'right', 'function', 'f1' through 'f12').
     Structure: {"action": "press_keys", "keys": ["<key1>", "<key2>", ...]}
     Examples:
     - "press enter" -> {"action": "press_keys", "keys": ["enter"]}
