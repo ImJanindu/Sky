@@ -11,6 +11,9 @@ import actions
 import tts
 from gui import AssistantOverlay
 
+# Suppress the harmless Qt DPI access denied warning
+os.environ["QT_LOGGING_RULES"] = "qt.qpa.window=false"
+
 # Initialize pygame audio mixer once
 pygame.mixer.init()
 
@@ -25,7 +28,7 @@ if os.path.exists(WAKEUP_SOUND_PATH):
     try:
         wakeup_sound = pygame.mixer.Sound(WAKEUP_SOUND_PATH)
         wakeup_sound.set_volume(0.8)
-        print("[Audio System]: wakeup.mp3 loaded successfully.")
+        #print("[Audio System]: wakeup.mp3 loaded successfully.")
     except Exception as e:
         print(f"[Audio Error]: Failed to load wakeup.mp3: {e}")
 else:
