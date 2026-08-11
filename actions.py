@@ -229,7 +229,13 @@ def open_local_application(app_name: str):
         "file explorer": "explorer.exe",
         "explorer": "explorer.exe",
         "settings": "start ms-settings:",
-        "task manager": "taskmgr.exe"
+        "task manager": "taskmgr.exe",
+
+        # custom application paths
+        "obsidian": r"C:\Users\Public\Desktop\Obsidian.lnk",
+        "word": r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Word.lnk",
+        "powerpoint": r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk",
+        "share": r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\EasyShare.lnk" 
     }
 
     executable = app_lookup.get(clean_name, clean_name)
