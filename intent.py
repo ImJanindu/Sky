@@ -3,7 +3,7 @@ import json
 from groq import Groq
 
 # Replace with your actual key if not using environment variables
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "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")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY)
 
 SYSTEM_PROMPT = """

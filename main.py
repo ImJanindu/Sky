@@ -72,7 +72,6 @@ class AssistantWorker(QThread):
                 #tts.speak("Hello sir, at your service.", block=True)
                 
                 
-
                 # 3. Speech-to-Text Transcription
                 user_speech = stt.record_and_transcribe()
 
