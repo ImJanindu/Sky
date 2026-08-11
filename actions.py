@@ -38,7 +38,8 @@ def press_keyboard_keys(keys: list) -> bool:
         "option": "alt",
         "escape": "esc",
         "return": "enter",
-        "spacebar": "space"
+        "spacebar": "space",
+        "function": "fn"
     }
 
     clean_keys = [key_map.get(k.lower().strip(), k.lower().strip()) for k in keys]
