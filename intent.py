@@ -80,7 +80,8 @@ def parse_intent(spoken_text: str) -> dict:
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            # Update the model string to the new 120B model
+            model="openai/gpt-oss-120b",
             messages=messages,
             temperature=0.2,
             response_format={"type": "json_object"}
